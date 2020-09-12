@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Bangalore House Price Prediction</title>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+        	$(window).load(function() {
+			  
+			  console.log("document loaded" );
+			  
+			  $.get("{{ url_for('get_location_names') }}",
+			    function (data, status) {
+			      console.log("got response for get_location_names request");
+			      console.log(data)
+			      if(data) {
+			          var locations = data.locations;
+			          console.log(locations)
+			          var uiLocations = document.getElementById("uiLocations");
+			          $('#uiLocations').empty();
+			          for(var i in locations) {
+			              var opt = new Option(locations[i]);
+			              $('#uiLocations').append(opt);
+			          }
+			      }
+			  });
+
+			  $.get("{{ url_for('get_area_names') }}",
+			    function (data, status) {
+			      console.log("got response for get_area_names request");
+			      if(data) {
+			          var area = data.area;
+			          var uiArea = document.getElementById("uiAreas");
+			          $('#uiArea').empty();
+			          for(var i in area) {
+			              var opt = new Option(area[i]);
+			              $('#uiAreas').append(opt);
+			          }
+			      }
+			  });
+
+			  $.get("{{ url_for('get_availability_names') }}",
+			    function (data, status) {
+			      console.log("got response for get_availability_names request");
+			      if(data) {
+			          var availability = data.availability;
+			          var uiAvailability = document.getElementById("uiAvailability");
+			          $('#uiAvailability').empty();
+			          for(var i in availability) {
+			              var opt = new Option(availability[i]);
+			              $('#uiAvailability').append(opt);
+			          }
+			      }
+			  });
+
+			});
+			
+        </script>
+
+        <!-- BootStrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+            integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- css -->
+        <style>
+            body {
+                background-color:  #C2EABD;
+                text-align: center;
+            }
+
+            .navbar {
+                background-color: #000000;
+            }
+
+            a {
+                color: #f7ff08;
+                text-align: center;
+            }
+
+            a:hover {
+                color: #ff0808;
+              }
+
+            .icon-bar {
+              position: fixed;
+              top: 50%;
+              -webkit-transform: translateY(-50%);
+              -ms-transform: translateY(-50%);
+              transform: translateY(-50%);
+            }
+
+            .icon-bar a{
+              display: block;
+              text-align: center;
+              padding: 16px;
+              transition: all 0.3s ease;
+              color: white;
+              font-size: 20px;
+            }
+
+            .icon-bar a:hover {
+              background-color: #000;
+            }
+
+            .github {
+              background: #000000;
+              color: white;
+            }
+
+            .linkedin {
+              background: #007bb5;
+              color: white;
+            }
+    	</style>
+
+    </head>
+
+    <body bgcolor=#85dcb>
+
+        <!-- As a heading -->
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+            <div class="navbar-header"></div>
+          </div>
+        </nav>
+        <br>
+        <center>
+            <div class="icon-bar">
+                <a href="https://www.linkedin.com/in/rishabh7795/" target="_blank"class="linkedin"><i class="fa fa-linkedin"></i></a>
+                <a href="https://www.github.com/rishabh7795" target="_blank" class="github"><i class="fa fa-github"></i></a>
+            </div>
+            <h1> BANGALORE HOUSE PRICE PREDICTION </h1><br>
+
+            <div class="container">
+                <form action="\predict" method="POST" action="{{ url_for('predict') }}">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Location</h5>
+                                    <div>
+                                        <select class="location" name="loc" id="uiLocations" ></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br><br>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Area</h5>
+                                    <div>
+                                        <select class="area" name="area" id="uiAreas" >
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Availability</h5>
+                                        <select class="availability" name="avail" id="uiAvailability">
+                                        </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Square Footage</h5>
+                                    <input type="text" name="sqft" id="sqft" required="required" placeholder="Enter Square Footage"><br>
+                                    <h1 style="color:black;font-size:12px;">Eg: 1200, 2000</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">BHK</h5>
+                                    <input type="text" name="bhk" id="bhk" required="required" placeholder="Enter BHK"><br>
+                                    <h1 style="color:black;font-size:12px;">Eg: 2, 4</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Bathrooms</h5>
+                                    <input type="text" name="bath" id="bath" required="required" placeholder="Enter Bathrooms"><br>
+                                    <h1 style="color:black;font-size:12px;">Eg: 2, 4</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- Submit -->
+                    <button type="submit" value="Submit" class="btn btn-secondary">Estimate Price</button>
+                    <br><br>
+                </div>
+            </form>
+            <h3>{{ prediction_text }}</h3><br><br>
+        </center>
+        <p>© Rishabh Choudhary 2020</p>
+    </body>
+</html>
